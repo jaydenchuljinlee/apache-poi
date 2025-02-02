@@ -12,9 +12,8 @@ class ExcelServiceIntegrationTest {
 
     @BeforeEach
     fun setUp() {
-        val excelStyleFactory = ExcelStyleFactory()
-        val excelGenerator = ExcelGenerator(excelStyleFactory)
-        excelService = ExcelService(excelGenerator)
+        val excelExportService = ExcelExportService()
+        excelService = ExcelService(excelExportService)
     }
 
     @DisplayName("엑셀 파일이 정상적으로 생성되는지 확인한다")
