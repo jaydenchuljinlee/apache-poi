@@ -14,6 +14,53 @@ data class WorkbookUtils(
                 workbook.createSheet(sheetName)
             )
         }
+
+        fun of(workbook: Workbook, sheet: Sheet): WorkbookUtils {
+            return WorkbookUtils(workbook, sheet)
+        }
+    }
+
+    fun toSheetInfo(): SheetInfo {
+        val dataList = mutableListOf<List<String>>()
+        // 헤더 읽기
+        val headerRow = sheet.getRow(0)
+        val headers = (0 until headerRow.physicalNumberOfCells)
+            .map { colIndex -> headerRow.getCell(colIndex).stringCellValue }
+
+        // 데이터 읽기
+        for (rowIndex in 1..sheet.lastRowNum) {
+            val row = sheet.getRow(rowIndex)
+            val rowData = mutableListOf<String>()
+            headers.forEachIndexed { colIndex, header ->
+                val cell = row.getCell(colIndex)
+                val cellStr = cell?.toString() ?: "-"
+                rowData.add(cellStr)
+            }
+            dataList.add(rowData)
+        }
+        return SheetInfo.of(sheet.sheetName, headers, dataList)
+    }
+
+    fun getHeaders(): List<String> {
+        // 헤더 읽기
+        val headerRow = sheet.getRow(0)
+        return (0 until headerRow.physicalNumberOfCells)
+            .map { colIndex -> headerRow.getCell(colIndex).stringCellValue }
+    }
+
+    fun getDataList(): List<String> {
+        // 데이터 읽기
+        for (rowIndex in 1..sheet.lastRowNum) {
+            val row = sheet.getRow(rowIndex)
+            val rowData = mutableMapOf<String, String>()
+
+            headers.forEachIndexed { colIndex, header ->
+                val cell = row.getCell(colIndex)
+                rowData[header] = cell?.toString() ?: ""
+            }
+
+            dataList.add(rowData)
+        }
     }
 
     fun create(sheetInfo: SheetInfo) {
