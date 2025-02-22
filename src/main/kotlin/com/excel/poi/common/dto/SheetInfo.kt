@@ -1,4 +1,4 @@
-package com.excel.poi.dto
+package com.excel.poi.common.dto
 
 data class SheetInfo(
     val name: String,

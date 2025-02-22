@@ -1,6 +1,6 @@
-package com.excel.poi.utils
+package com.excel.poi.poi.utils
 
-import com.excel.poi.dto.SheetInfo
+import com.excel.poi.common.dto.SheetInfo
 import org.apache.poi.ss.usermodel.*
 
 data class WorkbookUtils(
@@ -48,20 +48,6 @@ data class WorkbookUtils(
             .map { colIndex -> headerRow.getCell(colIndex).stringCellValue }
     }
 
-    fun getDataList(): List<String> {
-        // 데이터 읽기
-        for (rowIndex in 1..sheet.lastRowNum) {
-            val row = sheet.getRow(rowIndex)
-            val rowData = mutableMapOf<String, String>()
-
-            headers.forEachIndexed { colIndex, header ->
-                val cell = row.getCell(colIndex)
-                rowData[header] = cell?.toString() ?: ""
-            }
-
-            dataList.add(rowData)
-        }
-    }
 
     fun create(sheetInfo: SheetInfo) {
         val headers = sheetInfo.headers
